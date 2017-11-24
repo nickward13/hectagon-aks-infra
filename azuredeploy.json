@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentName": {
+            "type": "string",
+            "defaultValue": "hectagon"
+        }
+    },
+    "variables": {
+        "clusterName": "[concat(parameters('environmentName'), 'k8s')]"
+    },
+    "resources": [
+        {
+            "location": "West US 2",
+            "name": "[variables('clusterName')]",
+            "type": "Microsoft.ContainerService/ManagedClusters",
+            "apiVersion": "2017-08-31",
+            "properties":{
+                "dnsPrefix": "[variables('clusterName')]",
+                "agentPoolProfiles": [
+                    {
+                      "count": 1,
+                      "name": "agentpool1",
+                      "vmSize": "Standard_D2_v2"
+                    }
+                ],
+                "linuxProfile": {
+                    "adminUsername": "azureuser",
+                    "ssh": {
+                        "publicKeys": [
+                        {
+                            "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZiLTRtEFHRVJOaiw+TKYk1d64GStSgrbW6JymwaF4cAqKdignjdzckhn3O3wvlbPtoip0YyLhuyzgHLLNG4Qf7Ttx3oaA0xFAA7ZAMjQVSNWNaTMbwvZ4D58wFaYK2bMXMk4rwndRPYUEU108qAGVWes8KyoJfHztJ+i9JWYkeg5LTXeB7QyMa0M1LZiBM9AF1qJdvDaBfNo4uelcoLfLzxbkWLgbg+r+Fuv+RTVDfJUdUyFf+t5NzRBVqzKSbnj8EbdhTc0AWTIgMvKjgmXjqVhBM92rCa2ngnQJc3ezSleHuM4KlNgEvGF+GYtxhOK5lbUIIEk6pVrzSI0OeMN7 nickward@DESKTOP-H0ICEJQ\n"
+                        }
+                        ]
+                    }
+                },
+                "servicePrincipalProfile": {
+                    "clientId": "37547c2c-072a-43ac-a541-8a3ef02674a4"
+                },
+                "kubernetesVersion": "1.7.7"  
+            }
+        }
+    ]
+}
